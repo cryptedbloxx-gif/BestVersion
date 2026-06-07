@@ -3,279 +3,110 @@
 const canvas = document.getElementById("particles");
 
 if (canvas) {
+  const ctx = canvas.getContext("2d");
 
-const ctx = canvas.getContext("2d");
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
+  const particles = [];
 
-const particles = [];
+  for (let i = 0; i < 80; i++) {
+    particles.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 3 + 1,
+      dx: (Math.random() - 0.5) * 0.4,
+      dy: (Math.random() - 0.5) * 0.4
+    });
+  }
 
-for (let i = 0; i < 80; i++) {
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-particles.push({
-x: Math.random() * canvas.width,
-y: Math.random() * canvas.height,
-r: Math.random() * 3 + 1,
-dx: (Math.random() - 0.5) * 0.4,
-dy: (Math.random() - 0.5) * 0.4
-});
+    particles.forEach(p => {
+      p.x += p.dx;
+      p.y += p.dy;
 
+      if (p.x < 0) p.x = canvas.width;
+      if (p.x > canvas.width) p.x = 0;
+
+      if (p.y < 0) p.y = canvas.height;
+      if (p.y > canvas.height) p.y = 0;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = "rgba(139,92,246,.6)";
+      ctx.fill();
+    });
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  window.addEventListener("resize", () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
 }
 
-function animate() {
+// ===== BESTVERSION =====
 
-ctx.clearRect(0, 0, canvas.width, canvas.height);
+let xp = Number(localStorage.getItem("xp")) || 0;
 
-particles.forEach(p => {
-
-p.x += p.dx;
-p.y += p.dy;
-
-if (p.x < 0) p.x = canvas.width;
-if (p.x > canvas.width) p.x = 0;
-
-if (p.y < 0) p.y = canvas.height;
-if (p.y > canvas.height) p.y = 0;
-
-ctx.beginPath();
-ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-ctx.fillStyle = "rgba(139,92,246,.6)";
-ctx.fill();
-
-});
-
-requestAnimationFrame(animate);
-
-}
-
-animate();
-
-window.addEventListener("resize", () => {
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-});
-
-}
-
-// =========================
-// BESTVERSION APP
-// =========================
-
-let habits =
-JSON.parse(localStorage.getItem("habits")) || [];
-
-let xp =
-Number(localStorage.getItem("xp")) || 0;
-
-const xpValue =
-document.getElementById("xpValue");
-
-const levelValue =
-document.getElementById("levelValue");
-
-const progressXP =
-document.getElementById("progressXP");
-
-const habitList =
-document.getElementById("habitList");
-
-const habitInput =
-document.getElementById("habitInput");
-
-const addHabitBtn =
-document.getElementById("addHabitBtn");
-
-// SAVE
-
-function saveData() {
-
-localStorage.setItem(
-"habits",
-JSON.stringify(habits)
-);
-
-localStorage.setItem(
-"xp",
-xp
-);
-
-}
-
-// LEVEL
+const xpCard = document.querySelector(".cards .card:nth-child(1) h2");
+const levelCard = document.querySelector(".cards .card:nth-child(2) h2");
 
 function updateStats() {
-
-if (xpValue)
-xpValue.textContent = xp;
-
-if (progressXP)
-progressXP.textContent = xp;
-
-if (levelValue)
-levelValue.textContent =
-Math.floor(xp / 100) + 1;
-
+  if (xpCard) xpCard.textContent = xp;
+  if (levelCard) levelCard.textContent = Math.floor(xp / 100) + 1;
 }
 
-// HABITS
-
-function renderHabits() {
-
-if (!habitList) return;
-
-habitList.innerHTML = "";
-
-habits.forEach((habit, index) => {
-
-const div =
-document.createElement("div");
-
-div.className = "habit";
-
-div.innerHTML = `
-<input type="checkbox"
-${habit.done ? "checked" : ""}>
-
-<span>${habit.name}</span>
-
-<button class="deleteBtn">
-Delete
-</button>
-`;
-
-const checkbox =
-div.querySelector("input");
-
-checkbox.addEventListener(
-"change",
-() => {
-
-if (
-checkbox.checked &&
-!habit.done
-) {
-xp += 10;
-}
-
-habit.done =
-checkbox.checked;
-
-saveData();
 updateStats();
 
-}
-);
+// EXISTING HABIT CHECKBOXES
 
-div.querySelector(
-".deleteBtn"
-).addEventListener(
-"click",
-() => {
+const checkboxes = document.querySelectorAll(".habit input");
 
-habits.splice(
-index,
-1
-);
+checkboxes.forEach(box => {
+  box.addEventListener("change", () => {
+    if (box.checked) {
+      xp += 10;
+    } else {
+      xp = Math.max(0, xp - 10);
+    }
 
-saveData();
-renderHabits();
-
-}
-);
-
-habitList.appendChild(div);
-
+    localStorage.setItem("xp", xp);
+    updateStats();
+  });
 });
 
-}
+// NAV BUTTONS
 
-// ADD HABIT
+const navLinks = document.querySelectorAll("nav a");
 
-if (addHabitBtn) {
+navLinks.forEach(link => {
+  link.addEventListener("click", e => {
+    e.preventDefault();
 
-addHabitBtn.addEventListener(
-"click",
-() => {
+    navLinks.forEach(l => l.classList.remove("active"));
+    link.classList.add("active");
 
-const name =
-habitInput.value.trim();
-
-if (!name) return;
-
-habits.push({
-name,
-done: false
+    alert(link.textContent.trim() + " page coming next.");
+  });
 });
 
-habitInput.value = "";
+// PROFILE BUTTON
 
-saveData();
-renderHabits();
+const profileBtn = document.querySelector(".profileBtn");
 
+if (profileBtn) {
+  profileBtn.addEventListener("click", () => {
+    alert(
+      "BestVersion Profile\\n\\nXP: " +
+      xp +
+      "\\nLevel: " +
+      (Math.floor(xp / 100) + 1)
+    );
+  });
 }
-);
-
-}
-
-// NAVIGATION
-
-const navButtons =
-document.querySelectorAll(
-".navBtn"
-);
-
-const pages =
-document.querySelectorAll(
-".page"
-);
-
-navButtons.forEach(btn => {
-
-btn.addEventListener(
-"click",
-(e) => {
-
-e.preventDefault();
-
-navButtons.forEach(b =>
-b.classList.remove(
-"active"
-)
-);
-
-btn.classList.add(
-"active"
-);
-
-pages.forEach(page =>
-page.classList.remove(
-"activePage"
-)
-);
-
-const target =
-btn.dataset.page;
-
-const targetPage =
-document.getElementById(
-target
-);
-
-if (targetPage) {
-
-targetPage.classList.add(
-"activePage"
-);
-
-}
-
-}
-);
-
-});
-
-// START
-
-updateStats();
-renderHabits();
