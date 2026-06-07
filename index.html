@@ -1,148 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Habit Dashboard</title>
 
-<title>BestVersion</title>
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+/* NAVBAR */
+nav {
+    display: flex;
+    gap: 20px;
+    padding: 15px;
+    background: #111827;
+    align-items: center;
+}
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+nav a {
+    color: #9ca3af;
+    text-decoration: none;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
 
-<link rel="stylesheet" href="style.css">
+nav a.active,
+nav a:hover {
+    background: #2563eb;
+    color: white;
+}
+
+/* PROFILE BUTTON */
+.profileBtn {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 10px;
+    background: #1f2937;
+    color: white;
+    cursor: pointer;
+}
+
+.profileBtn:hover {
+    background: #374151;
+}
+
+/* HABIT CARD */
+.habit {
+    margin: 30px;
+    padding: 15px;
+    background: #1e293b;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+}
+
+input[type="checkbox"] {
+    transform: scale(1.3);
+}
+</style>
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
+<nav>
+    <a href="#" class="active">🏠 Dashboard</a>
+    <a href="#">✅ Habits</a>
+    <a href="#">📈 Progress</a>
+    <a href="#">🏆 Achievements</a>
+    <a href="#">⚙ Settings</a>
+</nav>
 
-<div class="app">
+<button class="profileBtn">
+👤 Profile
+</button>
 
-    <aside class="sidebar">
-
-        <div class="brand">
-
-            <img src="logo.svg" class="logo">
-
-            <div>
-
-                <h2>BestVersion</h2>
-                <p>Level Up Life</p>
-
-            </div>
-
-        </div>
-
-        <nav>
-
-            <a href="#" class="active">🏠 Dashboard</a>
-            <a href="#">✅ Habits</a>
-            <a href="#">📈 Progress</a>
-            <a href="#">🏆 Achievements</a>
-            <a href="#">⚙ Settings</a>
-
-        </nav>
-
-    </aside>
-
-    <main>
-
-        <div class="topbar">
-
-            <h1>Welcome Back</h1>
-
-            <button class="profileBtn">
-                👤 Profile
-            </button>
-
-        </div>
-
-        <div class="cards">
-
-            <div class="card">
-
-                <h3>XP</h3>
-
-                <h2>720</h2>
-
-                <p>+35 Today</p>
-
-            </div>
-
-            <div class="card">
-
-                <h3>Level</h3>
-
-                <h2>7</h2>
-
-                <p>Next Level Soon</p>
-
-            </div>
-
-            <div class="card">
-
-                <h3>Streak</h3>
-
-                <h2>18 🔥</h2>
-
-                <p>Keep Going</p>
-
-            </div>
-
-        </div>
-
-        <div class="dashboard">
-
-            <div class="habitsPanel">
-
-                <h2>Today's Habits</h2>
-
-                <div class="habit">
-                    <input type="checkbox">
-                    Workout
-                </div>
-
-                <div class="habit">
-                    <input type="checkbox">
-                    Drink 3L Water
-                </div>
-
-                <div class="habit">
-                    <input type="checkbox">
-                    Read 10 Pages
-                </div>
-
-            </div>
-
-            <div class="achievementPanel">
-
-                <h2>Achievements</h2>
-
-                <div class="achievement">
-                    🏆 7 Day Streak
-                </div>
-
-                <div class="achievement">
-                    ⚡ First Level Up
-                </div>
-
-                <div class="achievement">
-                    💪 Consistency Beast
-                </div>
-
-            </div>
-
-        </div>
-
-    </main>
-
+<div class="habit">
+    <input type="checkbox">
+    Workout
 </div>
 
-<script src="script.js"></script>
-
 </body>
-
 </html>
